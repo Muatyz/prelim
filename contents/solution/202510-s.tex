@@ -1,0 +1,784 @@
+\documentclass[../../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}} % 指定图片目录，后续可以直接使用图片文件名。
+\begin{document}
+\section{2025年10月博士生资格考试注解}
+
+\subsection{流体力学}
+
+\begin{enumerate}
+    \item \textbf{列举涉及的重要物理量及其量纲}
+    
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    物理量 & 压强差 & 管长 & 半径 & 动力粘度 & 体积流量 \\
+    \hline
+    符号 & $\Delta P$ & $L$ & $R$ & $\mu$ & $Q$ \\
+    \hline
+    量纲 & $\mathrm{ML^{-1}T^{-2}}$ & $\mathrm{L}$ & $\mathrm{L}$ & $\mathrm{ML^{-1}T^{-1}}$ & $\mathrm{L^{3}T^{-1}}$ \\
+    \hline
+    \end{tabular}
+    \end{table}
+    
+    [HINT] 剪切应力 $\tau = \mu\times$ 速度梯度($\begin{aligned}\frac{\mathrm{d}v}{\mathrm{d}r}\end{aligned}$) 
+    
+    \item \textbf{通过量纲分析流量 $Q\propto \Delta P$ [提示: $Q\propto \frac{\Delta P}{L}$]}
+    
+    设 $\begin{aligned}Q \sim \left(\frac{\Delta P}{L}\right)^{a} R^{b} \mu^{c}\end{aligned}$, 而根据第一问中, 
+
+    \begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & 体积流量 & 压强梯度 & 半径 & 动力粘度 \\
+\hline
+符号 & $Q$ & $\frac{\Delta P}{L}$ & $R$ & $\mu$ \\
+\hline
+量纲 & $\mathrm{L^{3}T^{-1}}$ & $\mathrm{ML^{-2}T^{-2}}$ & $\mathrm{L}$ & $\mathrm{ML^{-1}T^{-1}}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+这实际形成了一个待解的线性方程组
+
+$$
+\begin{aligned}
+\mathrm{L^{3}T^{-1}} = \mathrm{(ML^{-2}T^{-2})}^{a} \cdot \mathrm{L}^{b} \cdot \mathrm{(ML^{-1}T^{-1})}^{c} = \mathrm{M}^{a+c} \mathrm{L}^{-2a+b-c} \mathrm{T}^{-2a-c}
+\end{aligned}
+$$
+
+指数比较:
+
+$$
+\begin{cases}
+a + c &= 0 \\
+-2a + b - c &= 3 \\
+-2a - c &= -1
+\end{cases}
+$$
+
+解得 $a = 1, b = 4, c = -1$. 因此得到 Poiseuille 定律的量纲形式
+
+$$
+Q \propto \frac{\Delta P}{L}  \frac{R^{4}}{\mu}
+$$
+
+    \item \textbf{写出约化 navier-stokes 方程, 证明只需求解速度分布 $v(r)$}
+    
+一般的 Navier-Stokes 方程为
+
+$$
+\rho \left(\frac{\partial\vec{v}}{\partial t} + \vec{v}\cdot\nabla\vec{v}\right) = -\nabla P + \mu\nabla^{2}\vec{v}
+$$
+
+对于圆柱管中的层流, 可以做出以下简化: 1. 稳态: $\frac{\partial}{\partial t} = 0$; 2. 层流: 湍流项 $\vec{v}\cdot\nabla\vec{v} = 0$; 3. 轴对称: $\vec{v} = v(r)\hat{z}$; 4. 不可压缩流体: $\nabla\cdot\vec{v} = 0$.
+
+因此得到简化后的 Navier-Stokes 方程
+
+$$
+0 = -\frac{\mathrm{d}P}{\mathrm{d}z} + \mu\nabla^{2}v
+$$
+
+柱坐标下, 
+
+$$
+\nabla^{2} = {\color{red}{\frac{1}{r}\frac{\mathrm{d}}{\mathrm{d}r}\left(r\frac{\mathrm{d}}{\mathrm{d}r}\right)}} + \frac{1}{r^{2}}\frac{\mathrm{d}^{2}}{\mathrm{d}\theta^{2}} + \frac{\mathrm{d}^{2}}{\mathrm{d}z^{2}}
+$$
+
+而该模型下 $\vec{v} = v({\color{red}{r}})\hat{z}$, 因此只需关注红色项.
+
+    \item \textbf{代入边界条件精确解 $v(r)$}
+    
+边界条件为 1. 中心不发散: $C_{1} = 0$; 2. 管壁无滑移: $v(R) = 0$. 因此
+
+$$
+0 = -\frac{\Delta P}{4\mu L}R^{2} + C_{2} \Rightarrow C_{2} = \frac{\Delta P}{4\mu L}R^{2}
+\Rightarrow v(r) = \frac{\Delta P}{4\mu L}(R^{2} - r^{2})
+$$
+
+    \item \textbf{精确解流量 $Q$}
+    
+$$
+\begin{aligned}
+Q &= \int v\mathrm{d}A = \int_{0}^{R}v(r) 2\pi r\mathrm{d}r = \int_{0}^{R} \frac{\Delta P}{4\mu L}(R^{2} - r^{2}) 2\pi r\mathrm{d}r\\
+&= \frac{\Delta P}{4\mu L}2\pi \int_{0}^{R} (R^{2}r - r^{3})\mathrm{d}r = \frac{\Delta P}{4\mu L}2\pi (R^{2}\frac{r^{2}}{2} - \frac{1}{4}r^{4})\Big|_{0}^{R}\\
+&= \frac{\Delta P}{4\mu L}2\pi \frac{1}{4}R^{4} = \frac{\pi R^{4}}{8\mu }\frac{\Delta P}{L}
+\end{aligned}
+$$
+
+    \item \textbf{比较精确解和量纲分析结果的异同}
+
+    \begin{itemize}
+        \item 量纲分析结果: $\begin{aligned}Q \propto \frac{\Delta P}{L}  \frac{R^{4}}{\mu}\end{aligned}$;
+        \item 精确解: $\begin{aligned}Q = \frac{\pi R^{4}}{8\mu }\frac{\Delta P}{L}\end{aligned}$
+    \end{itemize}
+
+量纲分析得到的解形式和精确解的完全一致, 而精确解则是得出了具体的系数 $\pi/8$. 
+\end{enumerate}
+
+\subsection{应力学}
+
+\begin{enumerate}
+    \item \textbf{画图说明应力概念}
+    
+应力被定义为 "单位面积上的内力", 因此量纲与压强相同: $\begin{aligned}\vec{t} = \lim_{\Delta A\to 0}\frac{\Delta\vec{F}}{\Delta A}\end{aligned}$. 显然 $\vec{t}$ 是和面元 $\Delta A$ 的选取有关的, 后者通常通过其法向量 $\hat{n}$ 和所在位置 $(x,y,z)$ 定义. 
+
+接下来研究 $\Delta\vec{F}$ 的方向. 不妨设 $\hat{n}$ 为 $x$ 轴正方向, 则
+
+$$
+\begin{aligned}
+\Delta\vec{F} &= \Delta F_{x}\hat{x} + (\Delta F_{y}\hat{y} + \Delta F_{z}\hat{z})\\
+&= \Delta F_{x}\hat{n} + (\Delta F_{y}\hat{y} + \Delta F_{z}\hat{z})
+\end{aligned}
+$$
+
+其中 $\Delta F_{x}\hat{n}$ 为法向分量(normal stress), $\Delta F_{y}\hat{y} + \Delta F_{z}\hat{z}$ 为切向分量(shear stress). 
+
+可以将 $\vec{t}_{x}$ (下标 $x$ 表示将 $\hat{n}$ 选取为 $\hat{x}$) 写作这样的形式: 
+
+$$
+\begin{aligned}
+\vec{t}_{x} &= \lim_{\Delta A\to 0}\frac{\Delta F_{x}}{\Delta A}\hat{x} + \lim_{\Delta A\to 0}\frac{\Delta F_{y}}{\Delta A}\hat{y} + \lim_{\Delta A\to 0}\frac{\Delta F_{z}}{\Delta A}\hat{z}\\
+&= \sigma_{x}\hat{x} + \tau_{xy}\hat{y} + \tau_{xz}\hat{z}
+\end{aligned}
+$$
+
+其中 $\sigma_{x}$ 也可写作 $\sigma_{xx}$ 的形式. $\sigma_{ij}$ 即可理解为, 施加在法线为 $i$ 轴的面上, 沿着 $j$ 轴的应力分量大小. 
+
+
+按照这个规则, 写出 $\hat{n}$ 为 $\hat{y}$ 和 $\hat{z}$ 时的应力: 
+
+$$
+\begin{aligned}
+\vec{t}_{y} &= \tau_{yx}\hat{x} + \sigma_{y}\hat{y} + \tau_{yz}\hat{z}\\
+\vec{t}_{z} &= \tau_{zx}\hat{x} + \tau_{zy}\hat{y} + \sigma_{z}\hat{z}
+\end{aligned}
+$$
+
+若将所有应力分量统一记为 $\sigma_{ij}$, 则可得到矩阵:
+
+$$
+\mathbf{\sigma} = \begin{bmatrix}
+\sigma_{xx} & \sigma_{xy} & \sigma_{xz}\\
+\sigma_{yx} & \sigma_{yy} & \sigma_{yz}\\
+\sigma_{zx} & \sigma_{zy} & \sigma_{zz}
+\end{bmatrix}
+$$
+
+因为物体内部需要满足力矩平衡, 因此这是一个对称矩阵, 即满足
+
+$$
+\sigma_{ij} = \sigma_{ji}
+$$
+
+    \item \textbf{解释为什么应力是张量}
+    
+应力和面元的选取有关: 
+
+$$
+\vec{t}_{i} = \sum_{j}\sigma_{ij}\hat{n}_{j}
+$$
+
+要求应力同时蕴含面元选取(面法线 $i$ 轴) 和应力分量( $j$ 轴)的信息, 因此应力必然会形成一个 $3\times 3$ 的二阶张量(矩阵). 
+
+
+    \item \textbf{说明什么时候应力可被简化为压强}
+
+    压强被定义为
+
+$$
+p = \frac{F_{n}}{A}
+$$
+
+因此只沿面元法向. 既然面元的选取是任意的, 因此压强具有各向同性. 对于一般的流体, 其应力张量为
+
+$$
+\sigma_{ij} = -p\delta_{ij} + \tau_{ij}
+$$
+
+其中 $\tau_{ij}$ 表示剪切应力, 通常是液体的粘性导致的. 因此对于静止流体具有
+
+$$
+\mathbf{\sigma} = -p\mathbb{I} = \begin{bmatrix}
+-p & 0 & 0\\
+0 & -p & 0\\
+0 & 0 & -p
+\end{bmatrix}
+$$
+
+因此在各向同性/无剪切的情况下, 应力可以被简化为压强. 
+\end{enumerate}
+
+\subsection{材料学}
+
+\begin{enumerate}
+    \item \textbf{解释概念 "杨氏模量"}
+\begin{enumerate}
+    \item 应力(stress): $\begin{aligned}\sigma = \frac{F}{A}\end{aligned}$, 即单位面积上承受的力, 量纲和压强相同;
+    \item 应变(strain): $\begin{aligned}\epsilon = \frac{\Delta L}{L}\end{aligned}$, 即长度的相对变化
+\end{enumerate}
+
+杨氏模量(Young's modulus)定义为应力与应变的比值:
+
+$$
+E = \frac{\sigma}{\epsilon}
+$$
+
+    \item \textbf{排序花岗岩, 钢铁, 橡胶材料的杨氏模量大小}
+
+$E$ 越大/小, 材料越硬/软.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+材料 & 杨氏模量 $E$ \\
+\hline
+橡胶 & $10^{6}\sim 10^{7}\,\mathrm{Pa}$ \\
+花岗岩 & $30\sim 70\,\mathrm{GPa}$ \\
+钢 & $200\,\mathrm{GPa}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+$\boxed{E_{\text{橡胶}} < E_{\text{花岗岩}} < E_{\text{钢}}}$.
+
+橡胶是高分子链, 具有构型熵弹性; 花岗岩是离子键和共价键混合, 刚度高但较脆; 钢是金属键, 刚度高且延展性更好. 
+
+    \item \textbf{解释概念 "泊松比", 并且举例说明负泊松比材料}
+
+\begin{itemize}
+    \item 轴向应变: $\epsilon_{\parallel}$, 在受力方向上的相对长度变化;
+    \item 横向应变: $\epsilon_{\perp}$, 垂直于受力方向上的相对长度变化.
+\end{itemize}
+
+泊松比(Poisson's ratio)定义为横向应变($\epsilon_{\perp}$)与轴向应变($\epsilon_{\parallel}$)的负比值: $\begin{aligned}
+    \nu = -\frac{\epsilon_{\perp}}{\epsilon_{\parallel}}
+\end{aligned}$. 
+
+一般的材料都是如同拉面般, 受拉伸时变细而受压缩时变粗, 即 $\nu > 0$. 
+
+单轴拉伸下, 泊松比和体积变化的关系: $\begin{aligned}
+    \frac{\Delta V}{V} = (1 - 2\nu)\epsilon
+\end{aligned}$
+
+负泊松比($\nu<0$) 则是指的受拉伸反而变粗, 受压缩反而变细的材料. 这类材料是因为内部具有独特的微观结构, 使得内部的结构单元在受力时产生旋转或者变形, 如 re-entrant honeycomb 结构.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/-nu.png}
+\end{figure}
+
+\end{enumerate}
+
+\subsection{布朗运动}
+
+\begin{enumerate}
+    \item \textbf{解释概念 "布朗运动"}
+
+布朗运动(Brownian motion)指的是悬浮在液体或气体中的微小颗粒, 由于受到周围分子热运动的不断随机撞击而产生的无规则运动. 
+
+均方位移:
+
+$$
+\langle x^{2}(t)\rangle = 2Dt, \quad D = \frac{k_{B}T}{\gamma}
+$$
+    \item \textbf{写出朗之万方程, 并对其进行变量解释}
+    
+$$
+m\frac{\mathrm{d}v}{\mathrm{d}t} = -\gamma v + \xi(t)
+$$
+
+$m$: 粒子质量; $-\gamma v$: 粘滞阻力; $\xi(t)$: 随机力, 且满足
+
+$$
+\begin{aligned}
+\langle \xi(t)\rangle &= 0\\ \langle \xi(t)\xi(t^{\prime})\rangle &= 2\gamma k_{B}T \delta(t-t^{\prime})
+\end{aligned}
+$$
+    \item \textbf{解释概念 "涨落耗散关系"}
+
+$$
+\boxed{\langle \xi(t)\xi(t^{\prime})\rangle = 2\gamma k_{B}T \delta(t-t^{\prime})}
+$$
+
+    \item \textbf{假定布朗粒子处于重力势中, 求解其在高度上的密度分布}
+
+设竖直向上为正方向, 则朗之万方程形式为
+
+$$
+m\frac{\mathrm{d}^{2}h}{\mathrm{d}t^{2}} = -\gamma \frac{\mathrm{d}h}{\mathrm{d}t} - mg + \xi(t)
+$$
+
+在该模型中, 有意义的解一般考虑布朗粒子处于过阻尼极限(粘滞远大于惯性), 则方程改写为
+
+$$
+0 = -\gamma\frac{\mathrm{d}h}{\mathrm{d}t} - mg + \xi(t)\\
+\Rightarrow \frac{\mathrm{d}h}{\mathrm{d}t} = -\frac{mg}{\gamma} + \frac{\xi(t)}{\gamma}
+$$
+
+若有微分方程
+
+$$
+\frac{\mathrm{d}h}{\mathrm{d}t} = A(h) + \eta(t)
+$$
+
+其中
+
+$$
+\langle \eta(t)\eta(t^{\prime})\rangle = 2D\delta(t-t^{\prime})
+$$
+
+则概率密度可改写为 Fokker-Planck 方程
+
+$$
+\frac{\partial f}{\partial t} = - \frac{\partial (Af)}{\partial h} + D\frac{\partial^{2}f}{\partial h^{2}}
+$$
+
+在该模型中, 
+
+$$
+A = -\frac{mg}{\gamma},\quad D = \frac{k_{B}T}{\gamma}
+$$
+
+因此 Fokker-Planck 方程为
+
+$$
+\frac{\partial f}{\partial t} = \frac{mg}{\gamma} \frac{\partial f}{\partial h} + \frac{k_{B}T}{\gamma}\frac{\partial^{2}f}{\partial h^{2}}
+$$
+
+在稳态/热平衡下, $\begin{aligned}\frac{\partial f}{\partial t} = 0\end{aligned}$, 即得到 ODE
+
+$$
+0 = \frac{mg}{\gamma} \frac{\mathrm{d}f}{\mathrm{d}h} + \frac{k_{B}T}{\gamma}\frac{\mathrm{d}^{2}f}{\mathrm{d}h^{2}}
+$$
+
+设辅助函数 $\begin{aligned}u = \frac{\mathrm{d}f}{\mathrm{d}h}\end{aligned}$, 则方程为
+
+$$
+\frac{\mathrm{d}u}{\mathrm{d}h} = -\frac{mg}{k_{B}T}u
+\Rightarrow \frac{\mathrm{d}u}{u} = -\frac{mg}{k_{B}T}\mathrm{d}h
+\Rightarrow u = Ce^{-\frac{mg}{k_{B}T}h}
+$$
+
+因此
+
+$$
+f(h) = -\frac{Ck_{B}T}{mg}\exp{\left(-\frac{mg}{k_{B}T}h\right)} + D
+$$
+
+代入边界条件 $\begin{aligned}\lim_{h\to\infty}f = 0\end{aligned}$, 得到 $D = 0$. 
+
+归一化条件 $\begin{aligned}\int_{0}^{\infty}f(h)\mathrm{d}h = 1\end{aligned}$ 要求解形式为 $\begin{aligned}f(h) = \frac{1}{h_{0}}e^{-h/h_{0}}\end{aligned}$, 其中 $\begin{aligned}h_{0} = \frac{k_{B}T}{mg}\end{aligned}$.
+
+因此
+
+$$
+\boxed{f(h) = \frac{mg}{k_{B}T}e^{-\frac{mg}{k_{B}T}h}}
+$$
+
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+{\color{gray}{[Discussion] Fokker-Planck 方程的导出. 
+
+一维 Ito SDE(stochastic differential equation, 随机微分方程)为 
+
+$$
+\mathrm{d}x = A(x)\mathrm{d}t + \sqrt{2D}\mathrm{d}W_{t}
+$$
+
+> $\langle\mathrm{d}W_{t}\rangle = 0$, $\langle(\mathrm{d}W_{t})^{2}\rangle = \mathrm{d}t$. 
+
+设概率密度为 $f(x,t)$, 且引入辅助函数 $\phi(x)$, 其期望为
+
+$$
+\langle \phi(x)\rangle = \int \phi(x)f(x,t)\mathrm{d}x
+$$
+
+微元展开:
+
+$$
+\mathrm{d}\phi = \phi^{\prime}(x)\mathrm{d}x + \frac{\phi^{\prime\prime}(x)}{2}(\mathrm{d}x)^{2}
+$$
+
+代入 $\mathrm{d}x = A(x)\mathrm{d}t + \sqrt{2D}\mathrm{d}W$, 需要注意到性质
+
+$$
+W_{t+\Delta t} - W_{t}\sim \mathcal{N}(0,\Delta t)\Rightarrow \Delta W\sim\sqrt{\Delta t}
+$$
+
+因此有 
+
+$$
+(\mathrm{d}x)^{2} = (A(x)\mathrm{d}t + \sqrt{2D}\mathrm{d}W)^{2} = 2D\mathrm{d}t
+$$
+
+于是
+
+$$
+\begin{aligned}
+\mathrm{d}\phi &= \phi^{\prime}(x)A\mathrm{d}t + \phi^{\prime}\sqrt{2D}\mathrm{d}W + D\phi^{\prime\prime}\mathrm{d}t\\
+&= \left[A\phi^{\prime} + D\phi^{\prime\prime}\right]\mathrm{d}t + \sqrt{2D}\phi^{\prime}\mathrm{d}W
+\end{aligned}
+$$
+
+对两侧取期望, 且注意到 $\langle \mathrm{d}W\rangle = 0$, 因此
+
+$$
+\mathrm{d}\langle\phi\rangle = \langle A\phi^{\prime} + D\phi^{\prime\prime}\rangle \mathrm{d}t \Rightarrow \frac{\mathrm{d}\langle\phi\rangle}{\mathrm{d}t} = \langle A\phi^{\prime} + D\phi^{\prime\prime}\rangle
+$$
+
+将 $\langle \cdot\rangle$ 展开为积分形式 $\int \cdot f\mathrm{d}x$: 
+
+$$
+\frac{\mathrm{d}}{\mathrm{d}t} \int\phi f\mathrm{d}x = \int (A\phi^{\prime} + D\phi^{\prime\prime})f\mathrm{d}x
+$$
+
+使用分部积分: 
+
+$$
+\begin{aligned}
+\int A\phi^{\prime}f\mathrm{d}x &= \int Af \mathrm{d}\phi = Af\phi - \int \phi \frac{\partial(Af)}{\partial x}\mathrm{d}x\\
+\int D\phi^{\prime\prime}f\mathrm{d}x &= \int Df\mathrm{d}\phi^{\prime} = Df\phi^{\prime} - \int \phi^{\prime}\frac{\partial Df}{\partial x}\mathrm{d}x\\
+&= Df\phi^{\prime} - \int \frac{\partial Df}{\partial x}\mathrm{d}\phi = Df\phi^{\prime} - \frac{\partial D f}{\partial x}\phi + \int \phi \frac{\partial^{2}Df}{\partial x^{2}}\mathrm{d}x
+\end{aligned}
+$$
+
+假定边界条件为 $0$, 因此化为形式
+
+$$
+\int A\phi^{\prime}f\mathrm{d}x = -\int \phi \frac{\partial }{\partial x}(Af)\mathrm{d}x\\
+\int D\phi^{\prime\prime}f\mathrm{d}x = \int \phi D\frac{\partial^{2}f}{\partial x^{2}}\mathrm{d}x
+$$
+
+代回原等式中:
+
+$$
+\frac{\mathrm{d}}{\mathrm{d}t}\int\phi f\mathrm{d}x = \int \phi \left[
+    -\frac{\partial }{\partial x}(Af) + D\frac{\partial^{2}f}{\partial x^{2}}
+\right]\mathrm{d}x
+$$
+
+因为对任意 $\phi$ 都成立, 因此
+
+$$
+\frac{\mathrm{d}}{\mathrm{d}t}\int\phi f\mathrm{d}x = \int \phi \frac{\partial f}{\partial t}\mathrm{d}x
+$$
+
+得到 Fokker-Planck 方程
+
+$$
+\boxed{\frac{\partial f}{\partial t} = -\frac{\partial }{\partial x}(Af) + D\frac{\partial^{2}f}{\partial x^{2}}}
+$$}}
+
+\end{enumerate}
+
+\subsection{聚合物}
+
+\begin{enumerate}
+    \item \textbf{解释概念 "理想链" 和 "非理想链", 并阐述两者之间的区别}
+    
+\begin{itemize}
+    \item 理想链(Ideal chain)
+
+忽略单元间的相互作用而可近似为 random walk 的模型. 设 $N$ 个等长链段 $b$: 
+
+$$
+\begin{aligned}
+\vec{R} &= \sum_{i=1}^{N}\vec{b}_{i},\quad \langle\vec{b}_{i}\cdot\vec{b}_{j}\rangle = b^{2}\delta_{ij}\\
+\vec{R}^{2} &= \vec{R}\cdot\vec{R} = \left(\sum_{i=1}^{N}\vec{b}_{i}\right)\cdot\left(\sum_{j=1}^{N}\vec{b}_{j}\right) = \sum_{i=1}^{N}\sum_{j=1}^{N}\vec{b}_{i}\cdot\vec{b}_{j}\\
+\langle R^{2}\rangle &= \sum_{i=1}^{N}\sum_{j=1}^{N}\langle \vec{b}_{i}\cdot\vec{b}_{j}\rangle = \sum_{i=1}^{N}\sum_{j=1}^{N} b^{2}\delta_{ij} = Nb^{2}
+\end{aligned}
+$$
+
+因此 $R\sim N^{1/2}$.
+    \item 非理想链(Non-ideal chain)
+
+单元存在排斥体积(self-avoidance), 单元之间不能重叠, 存在相互排斥作用. 因此相较于理想链, 半径将会修正为
+
+$$
+R\sim bN^{\nu}
+$$
+
+其中 $\nu$ 被称作 Flory 指数, 其具体大小和 Polymer 所处的溶剂环境有关. 
+\end{itemize}
+
+    \item \textbf{求解三维空间中理想链的熵弹性力}
+    
+{\color{gray}{[Recall] 一维空间中的 Random walk
+
+首先考虑最简单的 1D 模型. 设步长为 $a$, 总步数为 $N = n_{l} + n_{r}$, 则最后位置为 $R = (n_{r}-n_{l})a$ (假定向右为正方向). 向左和向右的概率均为 $1/2$, 因此处于位置 $R$ 的概率为
+
+$$
+\begin{aligned}
+p(R,N) &= \frac{N!}{n_{l}!n_{r}!}\frac{1}{2^{N}} = \frac{N!}{(\frac{Na+R}{2})!(\frac{Na-R}{2})!}\frac{1}{2^{N}}\\
+\ln{p} &\approx \ln{\sqrt{\frac{2}{\pi N}}} - \frac{R^{2}}{2Na^{2}}\\
+p(R,N) &\approx \sqrt{\frac{2}{\pi N}}\exp{\left(-\frac{R^{2}}{2Na^{2}}\right)}
+\end{aligned}
+$$
+
+计算 $\begin{aligned}\int_{-Na}^{Na}p\mathrm{d}R = 2a\end{aligned}$, 因此概率密度需要再归一化:
+
+$$
+p(R,N) = \frac{1}{\sqrt{2\pi Na^{2}}}\exp{\left(-\frac{R^{2}}{2Na^{2}}\right)}
+$$
+
+这是一个高斯分布, 均值为 $\bar{R} = 0$, 方差为 $\sigma_{R}^{2} = Na^{2}$. 
+
+研究 Ideal chain 的熵弹性. 熵变被定义为 Boltzmann 熵差
+
+$$
+\Delta S = k_{B}\ln{\Omega(N,x)} - k_{B}\ln{\Omega(N,0)} = k_{B}\ln{\frac{p(N,x)}{p(N,0)}} = -\frac{1}{2}\frac{k_{B}}{Na^{2}}x^{2}
+$$
+
+自由能变 $\begin{aligned}
+    \Delta G = \Delta U - T\Delta S = \frac{1}{2}\frac{k_{B}T}{Na^{2}}x^{2}
+\end{aligned}$, 因此熵弹性力为 $\begin{aligned}
+    f = \frac{\partial G(N,x)}{\partial x} = \frac{k_{B}T}{Na^{2}}x
+\end{aligned}$. }}
+
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+推广至 3D 模型时, 则可将其视为三个独立的 1D 模型的叠加:
+
+$$
+\vec{R} = (R_{x}, R_{y}, R_{z}),\quad p(\vec{R}) = p(R_{x})p(R_{y})p(R_{z})
+$$
+
+而已得 1D 形式为 $\begin{aligned}
+    p(R_{i},N_{i}) = \frac{1}{\sqrt{2\pi N_{i}a^{2}}}\exp{\left(-\frac{R_{i}^{2}}{2N_{i}a^{2}}\right)}
+\end{aligned}$. 
+
+由于 $N$ 充分大, 我们可以近似 $N_{x} = N_{y} = N_{z} = N/3$, 因此
+
+$$
+p(\vec{R},N) = p\left(R_{x}, \frac{N}{3}\right)p\left(R_{y}, \frac{N}{3}\right)p\left(R_{z}, \frac{N}{3}\right) = \left(\frac{3}{2\pi Na^{2}}\right)^{3/2}\exp{\left(-\frac{3R^{2}}{2Na^{2}}\right)}
+$$
+
+类似地, 熵变为 Boltzmann 熵差 $\begin{aligned}
+    \Delta S = k_{B}\ln{\frac{p\left(\vec{R},N\right)}{p\left(\vec{0},N\right)}} = -\frac{3}{2}\frac{k_{B}}{Na^{2}}R^{2}
+\end{aligned}$, 自由能为 $F = U - TS$, 因为 $(U, T, P)$ 不变, 所以能变 $\begin{aligned}
+    \Delta F = - T\Delta S = \frac{3}{2}\frac{k_{B}T}{Na^{2}}R^{2}
+\end{aligned}$, 熵弹性力 $\begin{aligned}
+    f = 3 \frac{k_{B}T}{Na^{2}}R
+\end{aligned}$. 
+
+    \item \textbf{解释概念 "Flory 理论"}
+
+描述 non-ideal chain 的理论. 相比 ideal chain 引入了单元间的体积作用, 因此自由能中存在 "熵弹性" 和 "体积排斥" 两部分的竞争. 
+
+\begin{itemize}
+    \item 熵弹性(entropic elasticity): $\begin{aligned}
+        F_{\text{elastic}} = \frac{3}{2}\frac{k_{B}T}{Na^{2}}R^{2}
+    \end{aligned}$
+
+    \item 体积排斥(excluded volume): 单元的数密度为 $\begin{aligned}
+        n\sim \frac{N}{R^{3}}
+    \end{aligned}$, 引入排斥体积参数 $v$, 则体积排斥能密度 $\sim vn^{2}$. 将能密度在空间上积分, 则总共的体积排斥能写作 $\begin{aligned}
+        F_{\text{int}}\sim k_{B}T vn^{2}R^{3} \sim k_{B}T v\frac{N^{2}}{R^{3}}
+    \end{aligned}$
+\end{itemize}
+
+因此总的自由能为两者之和: $\begin{aligned}
+    F(R) \sim k_{B}T \left(
+    \frac{R^{2}}{Na^{2}} + v\frac{N^{2}}{R^{3}}
+\right)
+\end{aligned}$. 
+
+为了使得自由能最小, 熵弹性倾向于令 $R\downarrow$, 而体积排斥倾向于令 $R\uparrow$. 求偏导以求得极小值: 
+
+$$
+\frac{\partial F}{\partial R} = k_{B}T \left(
+    \frac{2R}{Na^{2}} - 3v\frac{N^{2}}{R^{4}}
+\right) = 0 \Rightarrow R \sim aN^{3/5}
+$$
+
+可将上式进一步抽象为 $R\sim aN^{\nu}$, 其中 $\nu$ 被称作 Flory 指数. 需要注意的是不同维度下 Flory 指数也不同. 例如 1D 下 $\nu = 1$, 2D 下 $\nu = 3/4$. 3D 下 $\nu$ 的精确解约为 $\nu\approx 0.588$. 
+
+    \item \textbf{若将聚合物溶解于某溶剂中, 阐述溶剂和温度对其平均半径的影响}
+
+溶剂和温度会影响排斥体积参数 $\nu$. 根据单体和溶剂的亲和性, 可将溶剂进行分类: 
+
+\begin{itemize}
+    \item Good solvent(好溶剂): 单体和溶剂亲和, 从而体现出链单元间的排斥作用, $\nu>0$. 此时尺度为上面的 self-avoiding walk 解: $R\sim aN^{3/5}$;
+    \item Theta solvent($\theta$ 溶剂): 吸引和排斥相互抵消, $\nu=0$. 在 $\theta$ 溶剂中聚合物表现为理想链(random walk): $R\sim aN^{1/2}$;
+    \item Poor solvent(差溶剂): 单体和溶剂不亲和, 因此单体更倾向于相互接触, $\nu < 0$. 此时链会发生 "collapse(塌缩)" 现象, 即可将聚合物视为致密球体. 此时回过头检查自由能式, $\begin{aligned}
+        F(R)\sim k_{B}T \left(
+    \frac{R^{2}}{Na^{2}} - |v|\frac{N^{2}}{R^{3}}
+\right)
+    \end{aligned}$, 
+
+当 $R\downarrow$ 时, $F\rightarrow -\infty$, 这显然是荒谬的. 引入三体排斥项 $\begin{aligned}
+    \iiint wn^{3}\mathrm{d}R
+\end{aligned}$, 则 Flory 自由能为
+
+$$
+\begin{aligned}
+F(R) \sim k_{B}T \left(
+    \frac{R^{2}}{Na^{2}} - |v|\frac{N^{2}}{R^{3}} + w\frac{N^{3}}{R^{6}}
+\right)\approx k_{B}T \left(
+    - |v|\frac{N^{2}}{R^{3}} + w\frac{N^{3}}{R^{6}}
+\right)
+\end{aligned}
+$$
+
+因为聚合物塌缩为球状($R\rightarrow 0$), 因此忽略熵弹性项 $R^{2}$. 求偏导以求极小值: 
+
+$$
+\frac{\partial F}{\partial R} = k_{B}T \left(
+    3|v|\frac{N^{2}}{R^{4}} - 6w\frac{N^{3}}{R^{7}}
+\right) = 0\\\\
+\Rightarrow R^{3}\sim \frac{2w}{|v|}N \Rightarrow R\sim N^{1/3}
+$$
+
+也可以理解为, 因为聚合物形成致密球体, 此时密度约为常数, 即 $\begin{aligned}
+    \rho\sim\frac{N}{R^{3}}\approx \text{const}
+\end{aligned}$, 从而推测 $R^{3}\propto N\Rightarrow R\propto N^{1/3}$.
+
+\end{itemize}
+\end{enumerate}
+
+\subsection{液晶}
+
+\begin{enumerate}
+    \item \textbf{解释液晶的三种相: 丝状/向列相, 层状相和螺旋相}
+
+液晶是取向有序, 位置长程无序的物质状态. 有序程度从高到低: 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/lc-1.png}
+\end{figure}
+
+\begin{itemize}
+    \item *Crystalline(结晶相): 条件最强的相, 要求分子取向完全一致, 位置如同晶格一样严格有序;
+    \item Smectic(层状相): 分子长轴取向一致, 相比于 Nematic 具有层状结构, 存在一维位置有序. 层和层之间可以滑动;
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/lc-2.png}
+\end{figure}
+    \item Nematic(向列相): 分子长轴取向一致, 无层状结构, 位置(液晶分子中心)长程无序. 被比喻为 "盒子里的牙签", 总体方向一样但是可以自由向任意位置移动;
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/lc-3.png}
+\end{figure}
+    \item Cholesteric(螺旋相): Nematic 的 director $\vec{n}$ 沿着空间中某轴呈现螺旋;
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/lc-4.png}
+\end{figure}
+    \item Isotropic(各向同性相): 分子取向和位置完全无序, 是液晶在高温下表现出的液体性质, 物理性质呈现各向同性. $S = 0$. 
+\end{itemize}
+
+    \item \textbf{解释 splay, twist 和 bend 三种自由能}
+
+director 在空间中产生变化时, 即有弹性自由能, 可被分为三个部分: splay(扩张), twist(扭转) 和 bend(弯曲). 
+
+$$
+f = \underset{\text{Splay}}{\frac{1}{2}K_{1}(\nabla\cdot\vec{n})^{2}} + \underset{\text{Twist}}{\frac{1}{2}K_{2}(\vec{n}\cdot\nabla\times\vec{n})^{2}} + \underset{\text{Bend}}{\frac{1}{2}K_{3}|\vec{n}\times\nabla\times\vec{n}|^{2}}
+$$
+
+若材料近似各向同性($K_{1}\approx K_{2}\approx K_{3} = K$), 则
+
+$$
+f = \frac{1}{2}K(\nabla \vec{n})^{2}
+$$
+
+    \item \textbf{解释液晶的序参量定义}
+    
+{\color{gray}{[Discussion] 为何液晶需要新的序参量定义. 
+
+假设液晶分子长轴取向为单位向量 $\vec{u}$. 于是平均取向可以被定义为 $\vec{n} = \left\langle \vec{u} \right\rangle$. $\vec{u}$ 和 $\vec{n}$ 之间的夹角 $\theta$ 可以被视为描述液晶分子的参数. 接下来需要定义描述液晶分子的序参量, 即其大小和液晶整体的有序性相关. 
+
+在 Ising Model 中, 序参量被定义为 $\begin{aligned}L = \frac{1}{N}\sum_{i}\sigma_{i} = \frac{N_{+}-N_{-}}{N}\end{aligned}$, 即自旋的平均值. 
+
+\begin{itemize}
+    \item 如果借用 Ising Model 的定义, 我们有 $S_{1} = \langle\theta\rangle$. 然而, 液晶分子通常自身具有对称性(即长轴取向 $\vec{n}$ 和 $-\vec{n}$ 等价), 偏离平均取向 $\vec{n}$ 的分子 $\theta$ 和 $\theta+\pi$ 实际上是等价的, $S_{1}$ 却会错误的计算出 $\langle\theta\rangle = \theta+\pi/2$ 的结果. 
+    \item 序参量 $S_{2} = \left\langle\cos{\theta}\right\rangle$ 同样没好到哪里去, 虽然 $\cos{\theta}$ 具有 $\cos{(2\pi-\theta)} = \cos{\theta}$ 的对称性, 但是仍然具有 $\cos{(\theta+\pi)} = -\cos{\theta}$ 的问题: 明明取向相同, 却为 $S_{2}$ 添加了 $0$ 的成分. 
+    \item 最简单的消去符号的方法是对其做平方, 即拟定序参量为 $S_{3} = \langle\cos^{2}{\theta}\rangle$. 我们注意到: 
+    \begin{itemize}
+        \item 完全有序即 $\theta = 0$ 时, $S_{3} = \cos^{2}{0} = 1$; 
+        \item 完全无序时, $\theta$ 均匀分布在整个球壳上, 即 $\begin{aligned}
+            f(\theta,\phi) = \frac{1}{4\pi}
+        \end{aligned}$. 
+
+    计算拟定序参量
+
+    $$
+    \begin{aligned}
+    \langle\cos^{2}(\theta)\rangle &= \int_{0}^{2\pi}\mathrm{d}\phi \int_{0}^{\pi}\cos^{2}{\theta}\cdot \frac{1}{4\pi}\sin{\theta}\mathrm{d}\theta
+    = -\frac{1}{2}\int_{0}^{\pi}\cos^{2}{\theta}\mathrm{d}(\cos{\theta}) \\\\
+    &= -\frac{1}{2}\int_{1}^{-1}u^{2}\mathrm{d}u = \frac{1}{2}\frac{1}{3}u^{3}\bigg|_{-1}^{1} = \frac{1}{3}
+    \end{aligned}
+    $$
+
+    我们希望在完全无序时, 序参量为 $0$. 因此对该单调函数进行线性变换即可得到最后结果. 
+    \end{itemize}
+\end{itemize}
+
+从更深层次的角度而言, 任何方向分布函数都可以展开为 Legendre 多项式级数:
+
+$$
+f(\theta) = \sum_{l=0}^{\infty} \frac{2l+1}{2}\langle P_{l}(\cos{\theta})\rangle P_{l}(\cos{\theta})
+$$
+
+\begin{itemize}
+    \item $l = 1$ 对应 $\langle\cos{\theta}\rangle$, 对应极性有序;
+    \item $l = 2$ 对应 $\begin{aligned}
+        \left\langle\frac{3\cos^{2}{\theta}-1}{2}\right\rangle
+    \end{aligned}$, 对应取向有序. 
+\end{itemize}}}
+
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+$$
+S = \left\langle \frac{3\cos^{2}{\theta} - 1}{2} \right\rangle
+$$
+
+\begin{enumerate}
+    \item 若 $S = 1$, 即所有 $\theta = 0$, 液晶分子取向完全平行一致(向列相及以上);
+    \item 若 $S = 0$, 即 $\begin{aligned}
+        \langle\cos^{2}{\theta}\rangle = \frac{1}{3}
+    \end{aligned}$, 这是液晶分子完全无序计算的结果.
+\end{enumerate}
+
+    \item \textbf{解释概念 "液晶的 $\begin{aligned}
+        \pm\frac{1}{2}
+    \end{aligned}$ 缺陷"}
+
+[Discussion] winding number 的定义. 
+
+可以借助电荷的电场线来理解 winding number. 对于点电荷 $q$, 在二维平面内研究其围线上电场方向的旋转. 如果以顺时针方向沿着围线旋转一周, 会发现电场方向也是以顺时针方向旋转一周 ($2\pi$). 因此其拓扑荷为 $m = 2\pi / (2\pi) = 1$, 这一点对于正负电荷都一样. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{image/winding_number.png}
+\end{figure}
+
+拓扑荷被定义为
+
+$$
+\boxed{m = \frac{1}{2\pi}\oint \mathrm{d}\theta}
+$$
+
+而在液晶中, 特殊的是 $\vec{u}$ 和 $-\vec{u}$ 是等价的. 因此若沿围线一周后, 分子取向 $\vec{u}$ 旋转了 $\pm\pi$, 实际上就已经完成了取向旋转 "一周". 此时围线中将会出现 $\pm \frac{1}{2}$ 的缺陷核. 两者分别被戏称为 "彗星"[$\begin{aligned}
+    \theta(\phi) = \frac{\phi}{2}
+\end{aligned}$] 和 "三叶"[$\begin{aligned}
+    \theta(\phi) = -\frac{\phi}{2}
+\end{aligned}$]. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{image/defects.png}
+\end{figure}
+
+\end{enumerate}
+
+\end{document}
