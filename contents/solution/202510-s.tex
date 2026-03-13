@@ -4,7 +4,7 @@
 \section{2025年10月博士生资格考试注解}
 
 \subsection{流体力学}
-
+Poiseuille 定律. 
 \begin{enumerate}
     \item \textbf{列举涉及的重要物理量及其量纲}
     
@@ -632,15 +632,269 @@ $$
 $$
 \frac{\partial F}{\partial R} = k_{B}T \left(
     3|v|\frac{N^{2}}{R^{4}} - 6w\frac{N^{3}}{R^{7}}
-\right) = 0\\\\
+\right) = 0\\
 \Rightarrow R^{3}\sim \frac{2w}{|v|}N \Rightarrow R\sim N^{1/3}
 $$
 
 也可以理解为, 因为聚合物形成致密球体, 此时密度约为常数, 即 $\begin{aligned}
     \rho\sim\frac{N}{R^{3}}\approx \text{const}
 \end{aligned}$, 从而推测 $R^{3}\propto N\Rightarrow R\propto N^{1/3}$.
+\end{itemize}
+
+{\color{gray}{\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+[Discussion] 聚合物混合熵的推导. 
+
+设两种聚合物混合, 分子链数分别为 $n_{1}$ 和 $n_{2}$, 聚合度分别为 $N_{1}$ 和 $N_{2}$. 混合物总格点数 $M = n_{1}N_{1} + n_{2}N_{2}$. 设该混合晶格的配位数为 $z$. 现在将聚合度为 $N$ 的链放入已经有 $x$ 个格点被占据的晶格中. 
+
+\begin{itemize}
+    \item 第 1 单体: 可以放在任意一个空位上, 因此选择数为 $M-x$;
+    \item 第 2 单体: 只能放在第 1 单体的配位, 此时空间中空格点的平均概率为 $\begin{aligned}p = \frac{M-x}{M}\end{aligned}$. 因此选择数为 $\begin{aligned}zp = z\frac{M-x}{M}\end{aligned}$;
+    \item 第 $3-N$ 单体: 由于自体积排斥, 后续可选的格点数为 $\begin{aligned}(z-1)p = (z-1)\frac{M-x}{M}\end{aligned}$;
+\end{itemize}
+
+因此, 放入该链的选择数 $\nu$ 为
+
+$$
+\nu = (M-x) \cdot \left[z\frac{M-x}{M}\right] \cdot \left[(z-1)\frac{M-x}{M}\right]^{N-2}\overset{z\approx z-1}{\simeq} \left[\frac{z-1}{M}\right]^{N-1}(M-x)^{N}
+$$
+
+证明近似 $\begin{aligned}(M-x)^{N}\approx\frac{(M-x)!}{(M-x-N)!}\end{aligned}$. 展开等式右边: 
+
+$$
+\begin{aligned}
+\frac{(M-x)!}{(M-x-N)!} = (M-x)(M-x-1)(M-x-2)\cdots [M-x-(N-1)]\\
+= (M-x)^{N}\left[
+    1\cdot \left(1 - \frac{1}{M-x}\right)\left(1 - \frac{2}{M-x}\right) \cdots\left(1 - \frac{N-1}{M-x}\right)
+\right]
+\end{aligned}
+$$
+
+由于 $M\gg N$, 因此 $\begin{aligned}1 - \frac{k}{M-x}\to 1\end{aligned}$. 
+
+若将 $M-x$ 视为整体 $M$, 该近似公式也可写作 $\begin{aligned}\frac{M!}{(M-N)!} \approx M^{N}\end{aligned}$.
+
+采用近似 $\begin{aligned}(M-x)^{N}\approx\frac{(M-x)!}{(M-x-N)!}\end{aligned}$, 第 $i$ 条放入聚合度为 $N$ 链的方法数为
+
+$$
+\nu_{i} = \left[\frac{z-1}{M}\right]^{N-1}\frac{(M-x_{i})!}{(M-x_{i}-N)!}
+$$
+
+\begin{itemize}
+    \item 分离状态 ( I-链和 II-链各自占据自己纯物质的晶格)
+
+对于 I-链, 总晶格数为 $M_{1} = n_{1}M_{1}$, 需往空晶格(初始 $x_{1}=0$) 放入 $n_{1}$ 条 I-链. 被占格点数 $x_{i} = (i-1)N $. 引入链的不可区分性因子 $\begin{aligned}\frac{1}{n_{1}!}\end{aligned}$, 得到总方法数为
+
+$$
+\begin{aligned}
+\Omega_{1} &= \frac{1}{n_{1}!}\prod_{i=1}^{n_{1}}\nu_{1,i} = \frac{1}{n_{1}!}\prod_{i=1}^{n_{1}}\left[\frac{z-1}{M_{1}}\right]^{N_{1}-1}\frac{[M-(i-1)N]!}{(M_{1}-iN_{1})!}\\
+&= \frac{1}{n_{1}!}\left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)}\prod_{i=1}^{n_{1}}\frac{[M-(i-1)N]!}{(M_{1}-iN_{1})!}\\
+&= \frac{1}{n_{1}!}\left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)} 
+\frac{M_{1}!}{(M_{1}-N_{1})!}
+\frac{(M_{1}-N_{1})!}{(M_{1}-2N_{1})!}\cdots
+\frac{N_{1}!}{0!}\\
+&= \frac{M_{1}!}{n_{1}!}\left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)}
+\end{aligned}
+$$
+
+II-链同理可得 $\begin{aligned}\Omega_{2} = \frac{M_{2}!}{n_{2}!}\left[\frac{z-1}{M_{2}}\right]^{n_{2}(N_{2}-1)}\end{aligned}$, 分离状态下的总状态数为 
+
+$$
+\begin{aligned}
+\Omega_{\text{sep}} &= \Omega_{1}\Omega_{2} = \frac{M_{1}!}{n_{1}!}\left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)}  \frac{M_{2}!}{n_{2}!}\left[\frac{z-1}{M_{2}}\right]^{n_{2}(N_{2}-1)}\\
+&= \frac{M_{1}!M_{2}!}{n_{1}!n_{2}!} \left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)} \left[\frac{z-1}{M_{2}}\right]^{n_{2}(N_{2}-1)}
+\end{aligned}
+$$
+    \item 混合状态. 现在晶格总数为 $M = n_{1}N_{1} + n_{2}N_{2}$. 前面已经推导出, $M$ 总格点数中已有 $x$ 格点被占, 放入 $N$ 聚合度链的方法数 $\nu$ 为
+
+$$
+\nu(x,N) = \left[\frac{z-1}{M}\right]^{N-1}\frac{(M-x)!}{(M-x-N)!}
+$$
+
+\begin{enumerate}
+    \item 填入 $n_{1}$ 条 I-链. 对于第 i 条被填入的 I-链, 已被占格点数 $x_{1,i}=(i-1)N_{1}$. 那么填入该 (I,i) 链的方法数为
+
+$$
+\nu_{1,i} = \left[\frac{z-1}{M}\right]^{N_{1}-1}\frac{[M-(i-1)N_{1}]!}{(M-iN_{1})!}
+$$
+
+引入 I-链不可区分性的因子 $\begin{aligned}\frac{1}{n_{1}!}\end{aligned}$, 填入这 $n_{1}$ 条 I-链的总方法数为
+
+$$
+\begin{aligned}
+W_{1} &= \frac{1}{n_{1}!}\prod_{i=1}^{n_{1}}\nu_{1,i} = \frac{1}{n_{1}!}\prod_{i=1}^{n_{1}}  \left[\frac{z-1}{M}\right]^{N_{1}-1} \frac{[M-(i-1)N_{1}]!}{(M-iN_{1})!}\\
+&= \frac{1}{n_{1}!} \left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1)} \prod_{i=1}^{n_{1}} \frac{[M-(i-1)N_{1}]!}{(M-iN_{1})!}\\
+&= \frac{1}{n_{1}!} \left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1)} \frac{M!}{(M-N_{1})!} \frac{(M-N_{1})!}{(M-2N_{1})!}\cdots \frac{[M-(n_{1}-1)N_{1}]!}{(M-n_{1}N_{1})!}\\
+&= \frac{1}{n_{1}!}\left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1)}\frac{M!}{(M-n_{1}N_{1})!}
+\end{aligned}
+$$
+    \item 继续填入 $n_{2}$ 条 II-链. 此时 I-链已经占据 $n_{1}N_{1}$ 个格点. 所以对于放入的第 $j$ 条 II-链, 已被占据的格点数为 $x_{2,j} = n_{1}N_{1} + (j-1)N_{2}$, 填入 (II,j) 链的方法数为
+
+$$
+\nu_{2,j} = \left[\frac{z-1}{M}\right]^{N_{2}-1}\frac{[M-n_{1}N_{1}-(j-1)N_{2}]!}{(M-n_{1}N_{1}-jN_{2})!}
+$$
+
+引入 II-链的不可区分性因子 $\begin{aligned}\frac{1}{n_{2}!}\end{aligned}$, 那么填入这 $n_{2}$ 条 II-链的总方法数为
+
+$$
+\begin{aligned}
+W_{2} &= \frac{1}{n_{2}!}\prod_{j=1}^{n_{2}}\nu_{2,j} = \frac{1}{n_{2}!}\prod_{j=1}^{n_{2}} \left[\frac{z-1}{M}\right]^{N_{2}-1}\frac{[M-n_{1}N_{1}-(j-1)N_{2}]!}{(M-n_{1}N_{1}-jN_{2})!}\\
+&= \frac{1}{n_{2}!} \left[\frac{z-1}{M}\right]^{n_{2}(N_{2}-1)}\prod_{j=1}^{n_{2}}\frac{[M-n_{1}N_{1}-(j-1)N_{2}]!}{(M-n_{1}N_{1}-jN_{2})!}\\
+&= \frac{1}{n_{2}!} \left[\frac{z-1}{M}\right]^{n_{2}(N_{2}-1)} \\
+&\times \frac{(M-n_{1}N_{1})!}{(M-n_{1}N_{1}-N_{2})!} \frac{(M-n_{1}N_{1}-N_{2})!}{(M-n_{1}N_{1}-2N_{2})!}\cdots \frac{[M-n_{1}N_{1} - (n_{2}-1)N_{2}]!}{(M-n_{1}N_{1}-n_{2}N_{2})!}\\
+&= \frac{1}{n_{2}!} \left[\frac{z-1}{M}\right]^{n_{2}(N_{2}-1)} \frac{(M-n_{1}N_{1})!}{(M-n_{1}N_{1}-n_{2}N_{2})!} \\
+&= \frac{1}{n_{2}!} \left[\frac{z-1}{M}\right]^{n_{2}(N_{2}-1)} \frac{(M-n_{1}N_{1})!}{0!}
+\end{aligned}
+$$
+
+\end{enumerate}
 
 \end{itemize}
+
+于是混合状态下的方法数为 
+
+$$
+\begin{aligned}
+\Omega_{\text{mix}} &= W_{1}W_{2} \\
+&= \frac{1}{n_{1}!}\left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1)}\frac{M!}{(M-n_{1}N_{1})!} \frac{1}{n_{2}!} \left[\frac{z-1}{M}\right]^{n_{2}(N_{2}-1)} \frac{(M-n_{1}N_{1})!}{0!}\\
+&= \frac{M!}{n_{1}!n_{2}!}\left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1) + n_{2}(N_{2}-1)}
+\end{aligned}
+$$
+
+混合熵被定义为 Boltzmann 熵变化量 $\begin{aligned}\Delta S = k_{B}\ln{\left(\frac{\Omega_{\text{mix}}}{\Omega_{\text{sep}}}\right)}\end{aligned}$, 而
+
+$$
+\frac{\Omega_{\text{mix}}}{\Omega_{\text{sep}}} = \frac{\frac{M!}{n_{1}!n_{2}!}\left[\frac{z-1}{M}\right]^{n_{1}(N_{1}-1) + n_{2}(N_{2}-1)}}{\frac{M_{1}!M_{2}!}{n_{1}!n_{2}!} \left[\frac{z-1}{M_{1}}\right]^{n_{1}(N_{1}-1)} \left[\frac{z-1}{M_{2}}\right]^{n_{2}(N_{2}-1)}} = \frac{M!}{M_{1}!M_{2}!}\frac{M_{1}^{n_{1}(N_{1}-1)}M_{2}^{n_{2}(N_{2}-1)}}{M^{n_{1}(N_{1}-1) + n_{2}(N_{2}-1)}}
+$$
+
+两边同取对数, 且使用 Stirling 近似 $\ln{X!}\approx X\ln{X} - X$, 第一项
+
+$$
+\begin{aligned}
+\ln{\frac{M!}{M_{1}!M_{2}!}} &\approx M\ln{M} - M - M_{1}\ln{M_{1}} + M_{1} - M_{2}\ln{M_{2}} + M_{2} \\
+&= M\ln{M} - M_{1}\ln{M_{1}} - M_{2}\ln{M_{2}}\\
+&= (M_{1}+M_{2})\ln{M} - M_{1}\ln{M_{1}} - M_{2}\ln{M_{2}}\\
+&= -M_{1}\ln{\left(\frac{M_{1}}{M}\right)} - M_{2}\ln{\left(\frac{M_{2}}{M}\right)}
+\end{aligned}
+$$
+
+第二项
+
+$$
+\begin{aligned}
+\ln{\left(\frac{M_{1}^{n_{1}(N_{1}-1)}}{M^{n_{1}(N_{1}-1)}}\frac{M_{2}^{n_{2}(N_{2}-1)}}{M^{n_{2}(N_{2}-1)}}\right)} &= n_{1}(N_{1}-1)\ln{\left(\frac{M_{1}}{M}\right)} + n_{2}(N_{2}-1)\ln{\left(\frac{M_{2}}{M}\right)}\\
+&= (M_{1}-n_{1}) \ln{\left(\frac{M_{1}}{M}\right)} + (M_{2}-n_{2})\ln{\left(\frac{M_{2}}{M}\right)}
+\end{aligned}
+$$
+
+约定体积分数为 $\phi_{i}$ 聚合物占据格点数 $N_{i}$ 与总格点数 $M$ 之比, 即 $\begin{aligned}\phi_{1} = \frac{M_{1}}{M} = \frac{n_{1}N_{1}}{M}\end{aligned}$, $\begin{aligned}\phi_{2} = \frac{M_{2}}{M} = \frac{n_{2}N_{2}}{M} = 1- \phi_{1}\end{aligned}$. 于是混合熵为
+
+$$
+\begin{aligned}
+\frac{\Delta S_{\text{mix}}}{k_{B}} &= -M_{1}\ln{\phi_{1}} - M_{2}\ln{\phi_{2}} + (M_{1}-n_{1}) \ln{\phi_{1}} + (M_{2}-n_{2})\ln{\phi_{2}}\\
+&= - n_{1}\ln{\phi_{1}} - n_{2}\ln{\phi_{2}}\\
+&= M\left[ - \frac{\phi_{1}}{N_{1}}\ln{\phi_{1}} - \frac{\phi_{2}}{N_{2}}\ln{\phi_{2}} \right]
+\end{aligned}
+$$
+
+单位格点的混合熵为
+
+$$
+\begin{aligned}
+\frac{1}{M}\frac{\Delta S_{\text{mix}}}{k_{B}} = \boxed{\frac{\Delta\bar{S}_{\text{mix}}}{k_{B}} = -\frac{\phi_{1}}{N_{1}}\ln{\phi_{1}} - \frac{\phi_{2}}{N_{2}}\ln{\phi_{2}}}
+\end{aligned}
+$$
+
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+[Discussion] Flory-Huggins 理论推导
+
+首先需要推导出 Flory-Huggins 自由能, 核心假设是溶剂和 polymer 的单体都会占据一个格点. 
+
+因此设总格点数为 $M$, 各格点体积为 $a^{3}$, polymer 长度均为 $N$, 且一共有 $n_{p}$ 条聚合物链. 
+
+每个溶剂分子占据 1 个格点, 且共有 $n_{s}$ 个溶剂分子. 因此存在关系式
+
+$$
+M =  Nn_{p} + n_{s} 
+$$
+
+polymer 的体积分数为 $\begin{aligned}\phi = \frac{Nn_{p}}{M}\end{aligned}$, 溶剂的体积分数为 $\begin{aligned}1 - \phi = \frac{n_{s}}{M}\end{aligned}$. 可以把溶剂分子视为聚合度为 1 的聚合物. 
+
+自由能 $F \equiv U - TS$, 混合(视为等温过程)后产生变化 $\Delta F_{\text{mix}} = \Delta U_{\text{mix}} - T\Delta S_{\text{mix}}$. 也可通过同除以格点数 $M$ 和 能量量纲 $k_{B}T$ 化为形式 $\begin{aligned}\frac{\Delta\bar{F}_{\text{mix}}}{k_{B}T} = \frac{\Delta\bar{U}_{\text{mix}}}{k_{B}T} - \frac{\Delta\bar{S}_{\text{mix}}}{k_{B}}\end{aligned}$. 
+
+设晶格配位数为 $z$. 那么将存在 $\varepsilon_{pp}$ (溶质-溶质), $\varepsilon_{ss}$ 溶剂-溶剂, $\varepsilon_{ps}$ 溶质-溶剂三种相互作用的能量. 
+
+对于溶质-溶剂(polymer-solvent), 采取平均场假设, 即溶质和溶剂配位的概率为 $P = \phi(1-\phi)$. 则 polymer-solvent 的总配位数为 $\begin{aligned}N_{ps} = \frac{1}{2}zM\phi(1-\phi)\end{aligned}$, 其中 $\begin{aligned}\frac{1}{2}\end{aligned}$ 是为了消除重复计数. 
+
+交换能被定义为 $\begin{aligned}\varepsilon = \varepsilon_{ps} - \frac{1}{2}(\varepsilon_{pp} + \varepsilon_{ss})\end{aligned}$. 那么由混合引起的内能变化则为
+
+$$
+\begin{aligned}
+\Delta U_{\text{mix}} &= N_{ps}\varepsilon = \frac{z\varepsilon}{2}M\phi(1-\phi) \\
+\Rightarrow \frac{\Delta\bar{U}_{\text{mix}}}{k_{B}T} &= \frac{\Delta U_{\text{mix}}}{Mk_{B}T} = \frac{z\varepsilon}{2k_{B}T} \phi (1-\phi) = \chi\phi(1-\phi)
+\end{aligned}
+$$
+
+其中 $\begin{aligned}\frac{z\varepsilon}{2k_{B}T}\end{aligned}$ 被定义为 Flory-Huggins 参数. 
+
+代入前面推导的混合熵公式, 即得到各格点自由能变化量(Flory-Huggins 自由能密度):
+
+$$
+\boxed{\frac{\Delta\bar{F}_{\text{mix}}}{k_{B}T} = \frac{\phi}{N}\ln{\phi} + (1-\phi)\ln{(1-\phi)} + \chi\phi(1-\phi)}
+$$
+
+在稀溶液极限 ($\phi\to 0$) 下, 有 $\begin{aligned}\ln{(1-x)} = - x - \frac{x^{2}}{2}\end{aligned}$, 则
+
+$$
+(1-\phi)\ln{(1-\phi)} = -\phi + \frac{\phi^{2}}{2} + \mathcal{O}(\phi^{3})
+$$
+
+自由能可写作
+
+$$
+\frac{\Delta\bar{F}_{\text{mix}}}{k_{B}T} = \overset{\text{ideal mix entropy}}{\frac{\phi}{N}\ln{\phi}} + \underset{A_{1}}{(\chi-1)}\phi + \underset{A_{2}}{\left(\frac{1}{2}-\chi\right)}\phi^{2} + \mathcal{O}(\phi^{3})
+$$
+
+这个形式来源于 Virial expansion: 
+
+$$
+\begin{aligned}
+\frac{f}{k_{B}T} = \frac{\phi}{N}\ln{\phi} + A_{1}\phi + A_{2}\phi^{2} + A_{3}\phi^{3} + \cdots
+\end{aligned}
+$$
+
+其中 $A_{1}$ 代表的是溶质和溶剂的平均能量贡献, $A_{2}$ 是溶质与溶质的两体相互作用. 
+
+$$
+A_{2}\sim \frac{v}{a^{3}}\Rightarrow v\propto a^{3}\left(\frac{1}{2}-\chi\right) \Rightarrow v = a^{3}(1-2\chi)
+$$
+
+这样就回到了熟悉的通过体积排斥参数 $v$ 来讨论溶剂性能的领域. 
+
+\begin{itemize}
+    \item 当 $T$ 较高, 使得 $\begin{aligned}\chi = \frac{z\varepsilon}{2k_{B}T}<\frac{1}{2}\end{aligned}$, 则 $v = a^{3}(1-2\chi)>0$, 链膨胀;
+    \item 当 $\begin{aligned}T = T_{\theta} = \frac{z\varepsilon}{k_{B}}\end{aligned}$, 使得 $\begin{aligned}\chi = \frac{z\varepsilon}{2k_{B}T} = \frac{1}{2}\end{aligned}$, 则 $v = a^{3}(1-2\chi)=0$, 理想链;
+    \item 当 $T$ 较低, 使得 $\begin{aligned}\chi = \frac{z\varepsilon}{2k_{B}T}>\frac{1}{2}\end{aligned}$, 则 $v = a^{3}(1-2\chi)<0$, 链塌缩;
+\end{itemize}
+
+根据 $T_{\theta}$ 的定义, 可将其代入至 $\chi$ 式中替换系数: 
+
+$$
+v = a^{3} \left(1 - 2 \frac{T_{\theta}}{2T}\right) = a^{3} \left(1 - \frac{T_{\theta}}{T}\right)\propto \boxed{1 - \frac{T_{\theta}}{T}}
+$$
+
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}}}
+
+至于温度则是相当于在改变排斥体积参数 $v$, 因此可以视为温度在将溶剂在好溶剂在差溶剂之间调节. 体积排斥参数 $v$ 的温度 $T$ 依赖关系为 $\begin{aligned}v\propto 1 - \frac{T_{\theta}}{T}\end{aligned}$, 即低温 ($T < T_{\theta}$) 时体现为差溶剂, $T = T_{\theta}$ 时为 $\theta$ 溶剂, 高温 ($T > T_{\theta}$) 时为好溶剂.
+
+
 \end{enumerate}
 
 \subsection{液晶}
@@ -712,7 +966,7 @@ $$
     $$
     \begin{aligned}
     \langle\cos^{2}(\theta)\rangle &= \int_{0}^{2\pi}\mathrm{d}\phi \int_{0}^{\pi}\cos^{2}{\theta}\cdot \frac{1}{4\pi}\sin{\theta}\mathrm{d}\theta
-    = -\frac{1}{2}\int_{0}^{\pi}\cos^{2}{\theta}\mathrm{d}(\cos{\theta}) \\\\
+    = -\frac{1}{2}\int_{0}^{\pi}\cos^{2}{\theta}\mathrm{d}(\cos{\theta}) \\
     &= -\frac{1}{2}\int_{1}^{-1}u^{2}\mathrm{d}u = \frac{1}{2}\frac{1}{3}u^{3}\bigg|_{-1}^{1} = \frac{1}{3}
     \end{aligned}
     $$
